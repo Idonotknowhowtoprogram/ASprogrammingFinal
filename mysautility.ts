@@ -15,7 +15,7 @@ await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
 await page.waitForSelector('.form-control', {
     visible: true,
   });
-await page.type('.form-control', 'michael.taylor@sonomaacademy.org');
+await page.type('.form-control', 'firstname.lastname@sonomaacademy.org');
 await page.click('.btn-lg');
 await page.waitForSelector('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b', {
     visible: true,
@@ -25,6 +25,6 @@ await page.waitForNetworkIdle();
 await page.click('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b');
 
 await page.waitForSelector('input[type="password"]');
-await page.type('.whsOnd.zHQkBf', 'alksdjf;lj');
+await page.type('.whsOnd.zHQkBf', 'password');
 //await browser.close();
 })();
