@@ -28,3 +28,59 @@ await page.waitForSelector('input[type="password"]');
 await page.type('.whsOnd.zHQkBf', 'password');
 //await browser.close();
 })();
+async function assignmentModeScrape() {
+    await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
+  
+    var grade1 = document.querySelector("#coursesContainer > div:nth-child(1) > div.col-md-2.standard-padding-needed > h3");
+  
+    var grade2 = document.querySelector("#coursesContainer > div:nth-child(2) > div.col-md-2.standard-padding-needed > h3");
+  
+    var grade3 = document.querySelector("#coursesContainer > div:nth-child(3) > div.col-md-2.standard-padding-needed > h3");
+  
+    var grade4 = document.querySelector("#coursesContainer > div:nth-child(4) > div.col-md-2.standard-padding-needed > h3");
+  
+    var class1 = document.querySelector("#coursesContainer > div:nth-child(1) > div:nth-child(1) > a > h3");
+  
+    var class2 = document.querySelector("#coursesContainer > div:nth-child(2) > div:nth-child(1) > a > h3");
+  
+    var class3 = document.querySelector("#coursesContainer > div:nth-child(3) > div:nth-child(1) > a > h3");
+  
+    var class4 = document.querySelector("#coursesContainer > div:nth-child(4) > div:nth-child(1) > a > h3");
+  
+    var class1ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(1) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
+  
+    var class2ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(2) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
+  
+    var class3ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(3) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
+  
+    var class4ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(4) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
+  
+  }
+  if (mode == "assignment") {
+    assignmentModeScrape()
+  }
+  
+  await div(`
+    <body>
+      <h2>${class1}</h2>
+      <class1>
+        <a>${grade1}</a>
+        <a>${class1ActiveAssignments}</a>
+      </class1>
+      <h2>${class2}</h2>
+      <class2>
+        <a>${grade2}</a>
+        <a>${class2ActiveAssignments}</a>
+      </class2>
+      <h2>${class3}</h2>
+      <class3>
+        <a>${grade3}</a>
+        <a>${class3ActiveAssignments}</a>
+      </class3>
+      <h2>${class4}</h2>
+      <class4>
+        <a>${grade4}</a>
+        <a>${class4ActiveAssignments}</a>
+      </class4>
+    </body>
+  </html>`)
