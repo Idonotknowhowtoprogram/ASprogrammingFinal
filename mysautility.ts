@@ -57,30 +57,29 @@ async function assignmentModeScrape() {
   
   }
   if (mode == "assignment") {
-    assignmentModeScrape()
-  }
-  
-  await div(`
+    assignmentModeScrape();
+    await div(`
     <body>
       <h2>${class1}</h2>
       <class1>
-        <a>${grade1}</a>
-        <a>${class1ActiveAssignments}</a>
+        <a>Your grade is ${grade1}</a>
+        <a>You have ${class1ActiveAssignments} active assignments</a>
       </class1>
       <h2>${class2}</h2>
       <class2>
-        <a>${grade2}</a>
-        <a>${class2ActiveAssignments}</a>
+        <a>Your grade is ${grade2}</a>
+        <a>You have${class2ActiveAssignments} active assignments</a>
       </class2>
       <h2>${class3}</h2>
       <class3>
-        <a>${grade3}</a>
-        <a>${class3ActiveAssignments}</a>
+        <a>Your grade is ${grade3}</a>
+        <a>You have ${class3ActiveAssignments} active assignments</a>
       </class3>
       <h2>${class4}</h2>
       <class4>
-        <a>${grade4}</a>
-        <a>${class4ActiveAssignments}</a>
+        <a>Your grade is ${grade4}</a>
+        <a>You have ${class4ActiveAssignments} active assignments</a>
       </class4>
     </body>
-  </html>`)
+  </html>`);
+  }
