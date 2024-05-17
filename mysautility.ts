@@ -4,6 +4,9 @@ import "@johnlindquist/kit"
 import { Value } from "@johnlindquist/kit/core/enum";
 
 const puppeteer = await npm('puppeteer');
+const browser = await puppeteer.launch({
+  headless: false
+});
 
 async function clickNextLogin(currentPage) {
     await currentPage.waitForSelector('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b', {
@@ -15,10 +18,7 @@ async function clickNextLogin(currentPage) {
     await currentPage.evaluate(() => {console.log("button clicked")});
 }
 
-const browser = await puppeteer.launch({
-    headless: true
-});
-
+//Login
 (async () => {
 var goodClose = false;
 const page = await browser.newPage();
@@ -26,12 +26,12 @@ await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
 await page.waitForSelector('.form-control', {
     visible: true,
   });
-await page.type('.form-control', 'michael.taylor@sonomaacademy.org');
+await page.type('.form-control', 'firstname.lastname@sonomaacademy.org');
 await page.click('.btn-lg');
 await page.waitForNetworkIdle();
 clickNextLogin(page);
 setTimeout(() => {
-    page.type('.whsOnd.zHQkBf', '3M8oPKZ-41')
+    page.type('.whsOnd.zHQkBf', 'password')
     setTimeout(() => {
         clickNextLogin(page)
         page.screenshot({path: '/screenshot.png'})
@@ -39,6 +39,7 @@ setTimeout(() => {
 }, 6000);
 })();
 
+//Web Scraping
 async function assignmentModeScrape() {
     await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
   
