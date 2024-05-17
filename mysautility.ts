@@ -5,29 +5,40 @@ import { Value } from "@johnlindquist/kit/core/enum";
 
 const puppeteer = await npm('puppeteer');
 
-(async () => {
+async function clickNextLogin(currentPage) {
+    await currentPage.waitForSelector('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b', {
+        visible: true,
+        clickable: true
+    });
+    await currentPage.evaluate(() => {console.log("button found")});
+    await currentPage.evaluate(() => {(<HTMLElement> document.querySelector('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b')).click()});
+    await currentPage.evaluate(() => {console.log("button clicked")});
+}
+
 const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: false
+    headless: true
 });
+
+(async () => {
+var goodClose = false;
 const page = await browser.newPage();
 await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
 await page.waitForSelector('.form-control', {
     visible: true,
   });
-await page.type('.form-control', 'firstname.lastname@sonomaacademy.org');
+await page.type('.form-control', 'michael.taylor@sonomaacademy.org');
 await page.click('.btn-lg');
-await page.waitForSelector('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b', {
-    visible: true,
-});
-await page.waitForSelector('#identifierId');
 await page.waitForNetworkIdle();
-await page.click('.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.LQeN7.BqKGqe.Jskylb.TrZEUc.lw1w4b');
-
-await page.waitForSelector('input[type="password"]');
-await page.type('.whsOnd.zHQkBf', 'password');
-//await browser.close();
+clickNextLogin(page);
+setTimeout(() => {
+    page.type('.whsOnd.zHQkBf', '3M8oPKZ-41')
+    setTimeout(() => {
+        clickNextLogin(page)
+        page.screenshot({path: '/screenshot.png'})
+    }, 3000)
+}, 6000);
 })();
+
 async function assignmentModeScrape() {
     await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
   
