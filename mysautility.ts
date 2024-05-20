@@ -42,31 +42,35 @@ setTimeout(() => {
 //Web Scraping
 async function assignmentModeScrape() {
     await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
-  
-    var grade1 = document.querySelector("#coursesContainer > div:nth-child(1) > div.col-md-2.standard-padding-needed > h3");
-  
-    var grade2 = document.querySelector("#coursesContainer > div:nth-child(2) > div.col-md-2.standard-padding-needed > h3");
-  
-    var grade3 = document.querySelector("#coursesContainer > div:nth-child(3) > div.col-md-2.standard-padding-needed > h3");
-  
-    var grade4 = document.querySelector("#coursesContainer > div:nth-child(4) > div.col-md-2.standard-padding-needed > h3");
-  
-    var class1 = document.querySelector("#coursesContainer > div:nth-child(1) > div:nth-child(1) > a > h3");
-  
-    var class2 = document.querySelector("#coursesContainer > div:nth-child(2) > div:nth-child(1) > a > h3");
-  
-    var class3 = document.querySelector("#coursesContainer > div:nth-child(3) > div:nth-child(1) > a > h3");
-  
-    var class4 = document.querySelector("#coursesContainer > div:nth-child(4) > div:nth-child(1) > a > h3");
-  
-    var class1ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(1) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
-  
-    var class2ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(2) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
-  
-    var class3ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(3) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
-  
-    var class4ActiveAssignments = document.querySelector("#coursesContainer > div:nth-child(4) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span");
-  
+    
+    var courseElements = [];
+
+    var divChildren = Array.from(document.getElementById('coursesContainer').children);
+    for (let i = 0; i < divChildren.length; i++) {
+        if (divChildren[i].tagName === 'DIV') {
+            courseElements.push(Array.from(divChildren[i].children as ChildNode[]));
+        }
+    }
+
+    var numOfCourses = courseElements.length;
+    console.log(courseElements);
+    var classes = [];
+
+    for (let i = 0; i < numOfCourses; i++) {
+        var classObj = {};
+        var element = courseElements[i][0];
+        var aElement = element.querySelector('a');
+        if (aElement) {
+            classObj.href = aElement.getAttribute('href');
+            var courseName = aElement.querySelector('h3');
+            if (courseName) {
+                classObj.name = courseName.textContent;
+            }
+        }
+        classes.push(classObj);
+    }
+
+
   }
   if (mode == "assignment") {
     assignmentModeScrape();
