@@ -75,11 +75,11 @@ let classes = []
 async function assignmentModeScrape() {
   await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
 
-  var courseElements = [];
+  var courseElements:HTMLCollection[] = [];
 
-  var divChildren = Array.from(document.getElementById('coursesContainer').children);
+  var divChildren = Array.from(document.getElementById('coursesContainer')!.children);
   for (let i = 0; i < divChildren.length; i++) {
-    courseElements.push(Array.from(divChildren[i].children as ChildNode[]));
+    courseElements.push(divChildren[i].children);
   }
 
   numOfCourses = courseElements.length;
@@ -92,22 +92,16 @@ async function assignmentModeScrape() {
       name: "error"
     };
     var gradeDiv = element.children[3]
-    var gradeNode = gradeDiv.firstChild.textContent;
+    var gradeNode = gradeDiv!.firstChild!.textContent!;
     classObj.grade = gradeNode;
-
-    var linkNode = element.firstChild;
-
+    var linkNode = element.firstChild!;
     if (linkNode.nodeName === 'A') {
-
         classObj.href = linkNode.getAttribute('href');
     }
-
     var h3Node = linkNode.firstChild;
-
     if (h3Node.nodeName === 'H3') {
       classObj.name = h3Node.textContent;
     }
-
     classes.push(classObj);
 }
 
@@ -128,11 +122,9 @@ for (let i = 0; i < numOfCourses; i++) {
     </div>
   `;
 }
-
 htmlString += `
   </body>
 </html>
 `;
   await div(htmlString);
 }
-
