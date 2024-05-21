@@ -24,7 +24,7 @@ async function clickNextLogin(currentPage) {
 
 //Login
 (async () => {
-<<<<<<< Updated upstream
+
 await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
 await page.waitForSelector('.form-control', {
     visible: true,
@@ -42,67 +42,14 @@ setTimeout(() => {
 
 // Web Scraping Stuff
 setTimeout(async () => {
-  //Grades
-  //var grade1 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(1) > div.col-md-2.standard-padding-needed > h3").innerHTML});
-
-  //var grade2 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(2) > div.col-md-2.standard-padding-needed > h3").innerHTML});
-  
-  //var grade3 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(3) > div.col-md-2.standard-padding-needed > h3").innerHTML});
-
-  //var grade4 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(4) > div.col-md-2.standard-padding-needed > h3").innerHTML});
-  
-  //Classes
-  var class1 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(1) > div:nth-child(1) > a > h3").innerHTML});
-    
-  var class2 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(2) > div:nth-child(1) > a > h3").innerHTML});
-    
-  var class3 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(3) > div:nth-child(1) > a > h3").innerHTML});
-    
-  //var class4 = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(4) > div:nth-child(1) > a > h3").innerHTML});
-
   await div(`
   <body>
     <h2>${class1},  ${class2}, ${class3}</h2>
     <h2></h2>
   </body>
 </html>`);
-  /*
-  var class1ActiveAssignments = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(1) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span").innerHTML});
-    
-  var class2ActiveAssignments = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(2) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span").innerHTML});
-    
-  var class3ActiveAssignments = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(3) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span").innerHTML});
-    
-  var class4ActiveAssignments = await page.evaluate(() => {return document.querySelector("#coursesContainer > div:nth-child(4) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span").innerHTML});
-
-        await div(`
-        <body>
-          <h2>${class1}</h2>
-          <class1>
-            <a>Your grade is ${grade1}</a>
-            <a>You have ${class1ActiveAssignments} active assignments</a>
-          </class1>
-          <h2>${class2}</h2>
-          <class2>
-            <a>Your grade is ${grade2}</a>
-            <a>You have${class2ActiveAssignments} active assignments</a>
-          </class2>
-          <h2>${class3}</h2>
-          <class3>
-            <a>Your grade is ${grade3}</a>
-            <a>You have ${class3ActiveAssignments} active assignments</a>
-          </class3>
-          <h2>${class4}</h2>
-          <class4>
-            <a>Your grade is ${grade4}</a>
-            <a>You have ${class4ActiveAssignments} active assignments</a>
-          </class4>
-        </body>
-      </html>`);
-      */
 }, 20000)
 })();
-=======
   var goodClose = false;
   const page = await browser.newPage();
   await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
@@ -123,6 +70,8 @@ setTimeout(async () => {
 })();
 
 //Web Scraping
+let numOfCourses = 0;
+let classes = []
 async function assignmentModeScrape() {
   await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
 
@@ -133,13 +82,15 @@ async function assignmentModeScrape() {
     courseElements.push(Array.from(divChildren[i].children as ChildNode[]));
   }
 
-  var numOfCourses = courseElements.length;
-
-  var classes = [];
+  numOfCourses = courseElements.length;
   
   for (let i = 0; i < numOfCourses; i++) {
     var element = courseElements[i][0];
-    var classObj = {};
+    var classObj = {
+      grade: "error",
+      href: "error",
+      name: "error"
+    };
     var gradeDiv = element.children[3]
     var gradeNode = gradeDiv.firstChild.textContent;
     classObj.grade = gradeNode;
@@ -164,29 +115,24 @@ async function assignmentModeScrape() {
 }
 if (mode == "assignment") {
   assignmentModeScrape();
-  await div(`
-    <body>
-      <h2>${class1}</h2>
-      <class1>
-        <a>Your grade is ${grade1}</a>
-        <a>You have ${class1ActiveAssignments} active assignments</a>
-      </class1>
-      <h2>${class2}</h2>
-      <class2>
-        <a>Your grade is ${grade2}</a>
-        <a>You have${class2ActiveAssignments} active assignments</a>
-      </class2>
-      <h2>${class3}</h2>
-      <class3>
-        <a>Your grade is ${grade3}</a>
-        <a>You have ${class3ActiveAssignments} active assignments</a>
-      </class3>
-      <h2>${class4}</h2>
-      <class4>
-        <a>Your grade is ${grade4}</a>
-        <a>You have ${class4ActiveAssignments} active assignments</a>
-      </class4>
-    </body>
-  </html>`);
+  let htmlString = `
+  <body>
+`;
+
+for (let i = 0; i < numOfCourses; i++) {
+  htmlString += `
+    <h2>${classes[i].name}</h2>
+    <div class="class${i+1}">
+      <a>Your grade is ${classes[i].grade}</a>
+      <a>You have ${classes[i].activeAssignments} active assignments</a>
+    </div>
+  `;
 }
->>>>>>> Stashed changes
+
+htmlString += `
+  </body>
+</html>
+`;
+  await div(htmlString);
+}
+
