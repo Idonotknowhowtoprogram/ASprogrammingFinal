@@ -73,34 +73,13 @@ setTimeout(async () => {
 let numOfCourses = 0;
 let classes:{grade:string, href:string, name:string, activeAssignments:string}[] = []
 async function assignmentModeScrape() {
-    await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
-    
-    var courseElements = [];
+  await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
 
-    var divChildren = Array.from(document.getElementById('coursesContainer').children);
-    for (let i = 0; i < divChildren.length; i++) {
-        if (divChildren[i].tagName === 'DIV') {
-            courseElements.push(Array.from(divChildren[i].children as ChildNode[]));
-        }
-    }
+  var courseElements:HTMLCollection[] = [];
 
-    var numOfCourses = courseElements.length;
-    console.log(courseElements);
-    var classes = [];
-
-    for (let i = 0; i < numOfCourses; i++) {
-        var classObj = {};
-        var element = courseElements[i][0];
-        var aElement = element.querySelector('a');
-        if (aElement) {
-            classObj.href = aElement.getAttribute('href');
-            var courseName = aElement.querySelector('h3');
-            if (courseName) {
-                classObj.name = courseName.textContent;
-            }
-        }
-        classes.push(classObj);
-    }
+  var divChildren = Array.from(document.getElementById('coursesContainer')!.children);
+  for (let i = 0; i < divChildren.length; i++) {
+    courseElements.push(divChildren[i].children);
   }
 
   numOfCourses = courseElements.length;
