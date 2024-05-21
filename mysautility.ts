@@ -71,7 +71,7 @@ setTimeout(async () => {
 
 //Web Scraping
 let numOfCourses = 0;
-let classes = []
+let classes:{grade:string, href:string, name:string, activeAssignments:string}[] = []
 async function assignmentModeScrape() {
   await page.click("#showHideGrade > div > label.btn.btn-default.btn-sm.bold.active > span");
 
@@ -89,18 +89,19 @@ async function assignmentModeScrape() {
     var classObj = {
       grade: "error",
       href: "error",
-      name: "error"
+      name: "error",
+      activeAssignments: "error"
     };
     var gradeDiv = element.children[3]
     var gradeNode = gradeDiv!.firstChild!.textContent!;
     classObj.grade = gradeNode;
-    var linkNode = element.firstChild!;
+    var linkNode = element.children[0];
     if (linkNode.nodeName === 'A') {
-        classObj.href = linkNode.getAttribute('href');
+        classObj.href = linkNode.getAttribute('href')!;
     }
-    var h3Node = linkNode.firstChild;
+    var h3Node = linkNode.firstChild!;
     if (h3Node.nodeName === 'H3') {
-      classObj.name = h3Node.textContent;
+      classObj.name = h3Node.textContent!;
     }
     classes.push(classObj);
 }
@@ -116,7 +117,7 @@ if (mode == "assignment") {
 for (let i = 0; i < numOfCourses; i++) {
   htmlString += `
     <h2>${classes[i].name}</h2>
-    <div class="class${i+1}">
+    <div>
       <a>Your grade is ${classes[i].grade}</a>
       <a>You have ${classes[i].activeAssignments} active assignments</a>
     </div>
