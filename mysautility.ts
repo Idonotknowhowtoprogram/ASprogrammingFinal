@@ -4,7 +4,7 @@ import "@johnlindquist/kit"
 import { Value } from "@johnlindquist/kit/core/enum";
 
 //const password = await arg("input your password");
-const password = "password"
+const password = "password";
 const mode = await arg("select mode", ["assignment", "grade", "general"]);
 const puppeteer = await npm('puppeteer');
 const browser = await puppeteer.launch({
@@ -21,8 +21,8 @@ async function clickNextLogin(currentPage) {
 }
 
 //Web Scraping
-let numOfCourses = 0;
-let classes:{grade:string, href:string, name:string, activeAssignments:string}[] = []
+var numOfCourses = 0;
+var classes:{grade:string, href:string, name:string, activeAssignments:string}[] = []
 
 async function assignmentModeScrape() {
   await page.waitForSelector("#showHideGrade > div > label:nth-child(2) > span", {
@@ -52,17 +52,26 @@ async function assignmentModeScrape() {
     }
   });
   console.log(thing1);
-  /*
+  
   numOfCourses = courseElements.length;
-
+  console.log(numOfCourses);
   for (let i = 0; i < numOfCourses; i++) {
-    var element = courseElements[i][0];
+    //var element = courseElements[i][0];
+    try {
+      console.log(courseElements[i] + "success");
+    } catch {
+      console.log("print failed :(")
+    }
+    /*
     var classObj = {
       grade: "error",
       href: "error",
       name: "error",
       activeAssignments: "error"
     };
+    */
+  
+/*
     var gradeDiv = element.children[3];
     var gradeNode = gradeDiv!.firstChild!.textContent!;
     classObj.grade = gradeNode;
@@ -75,8 +84,10 @@ async function assignmentModeScrape() {
       classObj.name = h3Node.textContent!;
     }
     classes.push(classObj);
-}
 */
+  }
+  console.log("for loop finished");
+
 }
 
 //Login
