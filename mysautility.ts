@@ -4,7 +4,7 @@ import "@johnlindquist/kit"
 import { Value } from "@johnlindquist/kit/core/enum";
 
 //const password = await arg("input your password");
-const password = "password";
+const password = "password"
 const mode = await arg("select mode", ["assignment", "grade", "general"]);
 const puppeteer = await npm('puppeteer');
 const browser = await puppeteer.launch({
@@ -36,15 +36,17 @@ async function assignmentModeScrape() {
     const container = document.getElementById('coursesContainer');
     return Array.from(container ? container.children : []);
   });
+  console.log(await page.evaluate(() => {
+    const container = document.getElementById('coursesContainer');
+    return Array.from(container ? container.children : []);
+  }) + "Hello");
 
-  console.log("after disaster");
-  console.log(divChildren);
   let thing1 = "not triggered";
   await new Promise((resolve, reject) => {
     try {
       for (let i = 0; i < divChildren.length; i++) {
-        courseElements.push(divChildren[i]!.children);
-        thing1 += " triggered :) ";
+        courseElements.push(divChildren[i]);
+        thing1 += <String>divChildren[i] + " ";
       }
       resolve("It is done. -_-");
     } catch (error) {
@@ -56,26 +58,27 @@ async function assignmentModeScrape() {
   numOfCourses = courseElements.length;
   console.log(numOfCourses);
   for (let i = 0; i < numOfCourses; i++) {
-    //var element = courseElements[i][0];
+    var element = courseElements[i];
     try {
       console.log(courseElements[i] + "success");
     } catch {
       console.log("print failed :(")
     }
-    /*
+    
     var classObj = {
       grade: "error",
       href: "error",
       name: "error",
       activeAssignments: "error"
     };
-    */
-  
-/*
-    var gradeDiv = element.children[3];
+
+    console.log(element);
+
+    var gradeDiv = element[3];
+    console.log(gradeDiv);
     var gradeNode = gradeDiv!.firstChild!.textContent!;
     classObj.grade = gradeNode;
-    var linkNode = element.children[0];
+    var linkNode = element[0];
     if (linkNode.nodeName === 'A') {
         classObj.href = linkNode.getAttribute('href')!;
     }
@@ -84,9 +87,9 @@ async function assignmentModeScrape() {
       classObj.name = h3Node.textContent!;
     }
     classes.push(classObj);
-*/
+
   }
-  console.log("for loop finished");
+  console.log("finished");
 
 }
 
@@ -96,7 +99,7 @@ await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
 await page.waitForSelector('.form-control', {
     visible: true,
   });
-await page.type('.form-control', 'first.last@sonomaacademy.org');
+await page.type('.form-control', 'fist.last@sonomaacademy.org');
 await page.click('.btn-lg');
 await page.waitForNetworkIdle();
 clickNextLogin(page);
