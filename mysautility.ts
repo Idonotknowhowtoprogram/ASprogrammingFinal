@@ -7,10 +7,16 @@ const puppeteer = await npm('puppeteer');
 const data = JSON.parse(await readFile("scripts/utilConfig.json", 'utf8'));
 const password = data.password;
 const email = data.email;
-const mode = await arg("select mode", ["assignment"]);
+const mode = await arg("select mode", ["assignment", "screenshot"]);
+var filePath;
+if (mode  == "screenshot") {
+  filePath = await path({
+    startPath: home(),
+    placeholder: "Select a file or directory",
+  }) + '/screenshot'
+}
 const browser = await puppeteer.launch({
   headless: false,
-  defaultViewport: false
 });
 const page = await browser.newPage();
 
@@ -46,7 +52,6 @@ async function assignmentModeScrape() {
     }
     return newThings;
   })
-  console.log(things)
   return things;
 }
 
@@ -80,5 +85,47 @@ if (mode == "assignment") {
   }
   await div(finalOut);
   await browser.close();
+} else if (mode == "screenshot") {
+  var buttons = ['#site-mobile-btn > div', '#site-mobile-sitenav > ul > li:nth-child(1) > a', '#site-mobile-sitenav > ul > li:nth-child(1) > div > ul > li:nth-child(3) > a']
+
+  //Button 1
+  await page.waitForSelector('#site-mobile-btn', {
+    visible: true,
+    clickable: true
+  });
+  await  page.evaluate(() => { (<HTMLElement>document.querySelector('#site-mobile-btn > div')).click()});
+
+  //Button 2
+  await page.waitForSelector('#site-mobile-sitenav > ul > li:nth-child(1) > a', {
+    visible: true,
+    clickable: true
+  });
+  await  page.evaluate(() => { (<HTMLElement>document.querySelector('#site-mobile-sitenav > ul > li:nth-child(1) > a')).click()});
+
+  //Button 3
+  await page.waitForSelector('#site-mobile-sitenav > ul > li:nth-child(1) > div > ul > li:nth-child(3) > a', {
+    visible: true,
+    clickable: true
+  });
+  await  page.evaluate(() => { (<HTMLElement>document.querySelector('#site-mobile-sitenav > ul > li:nth-child(1) > div > ul > li:nth-child(3) > a')).click()});
+  
+  await setTimeout(async () => {await page.screenshot({ path: filePath + 'currentAsssignments.png'  })}, 500);
+  //Opens Options Menu
+  await setTimeout(
+  async () => {
+  await page.waitForSelector('#optionsBtn', {
+    visible: true,
+    clickable: true
+  });
+  //Opens Missing Assignments
+  await  page.evaluate(() => { (<HTMLElement>document.querySelector('#optionsBtn')).click()});
+  await page.waitForSelector('#missing-assignment-menu', {
+    visible: true,
+    clickable: true
+  });
+  await  page.evaluate(() => { (<HTMLElement>document.querySelector('#missing-assignment-menu')).click()});
+  await setTimeout(async () => {await page.screenshot({ path: filePath + 'missingAssignments.png'})}, 3000);
+}, 2000);
+
 }
 })();
