@@ -7,8 +7,7 @@ const puppeteer = await npm('puppeteer');
 const data = JSON.parse(await readFile("scripts/utilConfig.json", 'utf8'));
 const password = data.password;
 const email = data.email;
-console.log(password + email);
-const mode = await arg("select mode", ["assignment", "screenshot"]);
+const mode = await arg("select mode", ["assignment"]);
 const browser = await puppeteer.launch({
   headless: false,
   defaultViewport: false
