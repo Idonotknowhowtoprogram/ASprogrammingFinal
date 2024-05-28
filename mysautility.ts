@@ -2,13 +2,16 @@
 
 import "@johnlindquist/kit"
 import { Value } from "@johnlindquist/kit/core/enum";
-
-//const password = await arg("input your password");
-const password = "password"
-const mode = await arg("select mode", ["assignment", "grade", "general"]);
 const puppeteer = await npm('puppeteer');
+
+const data = JSON.parse(await readFile("scripts/utilConfig.json", 'utf8'));
+const password = data.password;
+const email = data.email;
+console.log(password + email);
+const mode = await arg("select mode", ["assignment", "screenshot"]);
 const browser = await puppeteer.launch({
-  headless: false
+  headless: false,
+  defaultViewport: false
 });
 const page = await browser.newPage();
 
@@ -28,7 +31,7 @@ async function assignmentModeScrape() {
   await page.waitForSelector("#showHideGrade > div > label:nth-child(2) > span", {
     visible: true,
     clickable: true
-  })
+  });
   await page.click("#showHideGrade > div > label:nth-child(2) > span");
   var things = await page.evaluate(() => {
     let subElements = Array.from(document.getElementById("coursesContainer").children).length;
@@ -38,9 +41,8 @@ async function assignmentModeScrape() {
         let g = document.querySelector(`#coursesContainer > div:nth-child(${i}) > div.col-md-2.standard-padding-needed > h3`).innerHTML;
         let n = document.querySelector(`#coursesContainer > div:nth-child(${i}) > div:nth-child(1) > a > h3`).innerHTML;
         let aA = document.querySelector(`#coursesContainer > div:nth-child(${i}) > div:nth-child(3) > table > tbody > tr:nth-child(3) > td:nth-child(1) > span`).innerHTML;
-        newThings.push({"name": n,  "grade": g, "activeAssignments": aA});
+        newThings.push({name: n,  grade: g, activeAssignments: aA});
       } catch {
-        console.log("error  :(");
       }
     }
     return newThings;
@@ -55,7 +57,7 @@ await page.goto('https://sonomaacademy.myschoolapp.com/app#login');
 await page.waitForSelector('.form-control', {
     visible: true,
   });
-await page.type('.form-control', 'first.last@sonomaacademy.org');
+await page.type('.form-control', email);
 await page.click('.btn-lg');
 await page.waitForNetworkIdle();
 clickNextLogin(page);
@@ -69,6 +71,15 @@ setTimeout(() => {
 //Web Scraping function calls and output
 if (mode == "assignment") {
   var classInfo = await assignmentModeScrape();
-  await div(md(`${classInfo}`))
+  let finalOut = ``;
+  for (let i = 0; i < classInfo.length; i++) {
+    finalOut += `<h2>${classInfo[i].name}</h2>
+    <class1>
+      <a>Your grade is ${classInfo[i].grade}</a>
+      <a>You have ${classInfo[i].activeAssignments} active assignments</a>
+    </class1>`
+  }
+  await div(finalOut);
+  await browser.close();
 }
 })();
